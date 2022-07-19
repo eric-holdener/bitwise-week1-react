@@ -1,61 +1,19 @@
-import { useState, useEffect } from "react";
+const APIKey = process.env.REACT_APP_MOVIES_API_KEY;
 
-const APIKey = "42556459";
+let GetMoviesByName = async (name, page) => {
+  const url = `https://www.omdbapi.com/?apikey=${APIKey}&s=${name}&page=${page}`;
 
-
-
-let GetMoviesByName = async (name) => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const url = `https://www.omdbapi.com/?apikey=${APIKey}&s=${name}`;
-  useEffect(() => {
-    fetch(url)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(
-          `This is an HTTP error: The status is ${response.status}`
-        );
-      }
-      return response.json();
-    })
-    .then((actualData) => {setData(actualData); setError(null)})
-    .catch((err) => {
-      setError(err.message);
-      setData(null);
-    }).finally(() => {
-      setLoading(false);
-    });
-  }, []);
-
-  return data.Search;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
 };
 
-let GetMovieDetailsById = async(id) => {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+let GetMovieDetailsById = async (id) => {
   const url = `https://www.omdbapi.com/?apikey=${APIKey}&i=${id}`;
-  useEffect(() => {
-    fetch(url)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(
-          `This is an HTTP error: The status is ${response.status}`
-        );
-      }
-      return response.json();
-    })
-    .then((actualData) => {setData(actualData); setError(null)})
-    .catch((err) => {
-      setError(err.message);
-      setData(null);
-    }).finally(() => {
-      setLoading(false);
-    });
-  }, []);
 
-  return data.Search;
-}
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+};
 
 export { GetMoviesByName, GetMovieDetailsById };
