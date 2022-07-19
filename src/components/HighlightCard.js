@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { GetMoviesByName, GetMovieDetailsById } from "./utils"
 import styled from "styled-components";
+import OpenModal from "./OpenModal";
 
 const MovieCard = styled.div`
   display: flex;
@@ -44,14 +45,14 @@ export default function HighlightCard() {
   };
 
   function renderMovie(data) {
+    console.log(data)
     if(data.Search.length > 0) {
       return(
         <div style={{ display: "flex", justifyContent: "center", gap: 30, flexWrap: "wrap", marginLeft:"10vw", marginRight:"10vw" }}>
           {data.Search.map((movie, idx) => (
             <MovieCard className="movieCard">
               <MoviePoster src={movie.Poster} className="movieCard-poster"></MoviePoster>
-              <h3 className="movieCard-header">{movie.Title}</h3>
-              <p className="movieCard-year">{movie.Year}</p>
+              <OpenModal movie={movie}/>
             </MovieCard>
           ))}
         </div>
