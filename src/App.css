@@ -42,3 +42,49 @@
   margin-left: 50px;
   margin-right: 50px;
 }
+
+.lightMode {
+  background-color: white;
+  color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.darkMode {
+  background-color: black;
+  color: white; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.movieCardlight {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin-top: 2vh;
+  justify-content: space-between;
+  padding: 2vh 1vw 2vh 1vw;
+  box-shadow: 4px 4px lightblue;
+  align-self: center;
+  background-color: black;
+}
+
+.movieCarddark {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  margin-top: 2vh;
+  justify-content: space-between;
+  padding: 2vh 1vw 2vh 1vw;
+  box-shadow: 4px 4px lightblue;
+  border: 1px white;
+  align-self: center;
+  background-color: white;
+  color: white;
+}
+
+.movieCardPoster {
+  border: 4px solid lightblue;
+}

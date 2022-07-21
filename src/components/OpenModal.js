@@ -1,20 +1,43 @@
 import ReactModal from "react-modal"
 import { useEffect, useState } from "react";
+import { GetMovieDetailsById } from "./utils";
+import { useContext } from "react";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 export default function OpenModal(props) {
+  const { theme } = useContext(ThemeContext);
+
   const [open, setOpen] = useState(false);
+  const [data, setData] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedMovieID, setSelectedMovieID] = useState(null);
+
+  useEffect(() => {
+    if(selectedMovieID) {
+      GetMovieDetailsById(props.id).then((response) => {
+        setData(response);
+        setIsLoading(false);
+      })
+    }
+  }, [selectedMovieID]);
 
   return (
     <div>
-      {console.log(props)}
-      <button onClick={() => setOpen(true)}>Open</button>
+      <button onClick={() => {setOpen(true); setSelectedMovieID(props.id)}}>Open</button>
       <ReactModal isOpen={open}>
-        <div>
-          <img src={props.movie.Poster} className="movieCard-poster" />
-          <h3 className="movieCard-header">{props.movie.Title}</h3>
-          <p className="movieCard-year">{props.movie.Year}</p>
-          <button onClick={() => setOpen(false)}>Close</button>
-        </div>
+          {!isLoading ? (
+          <div>
+            <img src={data.Poster} className="movieCard-poster" />
+            <h3 className="movieCard-header">{data.Title}</h3>
+            <p className="movieCard-rated">{data.Rated}</p>
+            <p className="movieCard-plot">{data.Plot}</p>
+            <button onClick={() => {setOpen(false); setSelectedMovieID(null)}}>Close</button>
+          </div>
+        ) : (
+          <div>
+            <p>Loading...</p>
+          </div>
+        )}
       </ReactModal>
     </div>
   )

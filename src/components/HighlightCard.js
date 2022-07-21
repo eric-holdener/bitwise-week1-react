@@ -1,24 +1,14 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GetMoviesByName, GetMovieDetailsById } from "./utils"
 import styled from "styled-components";
 import OpenModal from "./OpenModal";
+import { useContext } from "react";
+import { ThemeContext, ThemeProvider } from "../contexts/ThemeContext";
 
-const MovieCard = styled.div`
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  margin-top: 2vh;
-  justify-content: space-between;
-  padding: 2vh 1vw 2vh 1vw;
-  box-shadow: 2px 2px;
-  align-self: center;
-`;
-
-const MoviePoster = styled.img`
-
-`;
 
 export default function HighlightCard() {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
@@ -45,15 +35,14 @@ export default function HighlightCard() {
   };
 
   function renderMovie(data) {
-    console.log(data)
     if(data.Search.length > 0) {
       return(
         <div style={{ display: "flex", justifyContent: "center", gap: 30, flexWrap: "wrap", marginLeft:"10vw", marginRight:"10vw" }}>
           {data.Search.map((movie, idx) => (
-            <MovieCard className="movieCard">
-              <MoviePoster src={movie.Poster} className="movieCard-poster"></MoviePoster>
-              <OpenModal movie={movie}/>
-            </MovieCard>
+            <div className={`movieCard${theme}`}>
+              <img src={movie.Poster} className="movieCardPoster"></img>
+              <OpenModal id={movie.imdbID}/>
+            </div>
           ))}
         </div>
       )
@@ -64,25 +53,25 @@ export default function HighlightCard() {
 
   function nextButton() {
     return(
-      <div>
+      <>
         <button onClick={() => {
           nextPage();
         }}>
           Next Page
         </button>
-      </div>
+      </>
     )
   }
 
   function lastButton() {
     return(
-      <div>
+      <>
         <button onClick={() => {
           lastPage();
         }}>
           Last Page
         </button>
-      </div>
+      </>
     )
   }
 
@@ -96,21 +85,29 @@ export default function HighlightCard() {
       )
     } else {
       return(
-        <div>
+        <div style={{ display: "flex", justifyContent: "center"}}>
           {nextButton()}
         </div>
       )
     }
   }
-  return (
-    <div>
-      <div>
-        <label htmlFor="searchBox">Search</label>
-        <input name="searchBox" type="text" onChange={(e) => setSearchInput(e.target.value)}/>
 
-        <button onClick={() => setSearch(searchInput)}>Submit</button>
-      </div>
-      <div>
+  function handleSubmit(e) {
+    e.preventDefault();
+    setSearch(searchInput);
+  }
+
+  return (
+    <div style={{ display:"flex", alignItems:"center", flexDirection:"column"}}>
+      <>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="searchBox">Search</label>
+          <input name="searchBox" type="text" onChange={(e) => setSearchInput(e.target.value)}/>
+
+          <button type="submit">Submit</button>
+        </form>
+      </>
+      <>
         {!isLoading ? (
         <div >
           {renderMovie(data)}
@@ -119,7 +116,10 @@ export default function HighlightCard() {
         ) : (
           <p>Loading</p>
         )}
-      </div>
+      </>
+      <>
+        <button onClick={() => toggleTheme()}>{theme}</button>
+      </>
     </div>
   )
 }
